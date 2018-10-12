@@ -1,0 +1,28 @@
+{
+  "name": "cc-api",
+  "version": "1.0.0",
+  "description": "CardConnect API - Express/Node.js Sample App",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevnat/cc-api.git"
+  },
+  "keywords": [
+    "payments",
+    "cardconnect",
+    "bolt",
+    "cardsecure"
+  ],
+  "author": "Kevin Nathan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kevnat/cc-api/issues"
+  },
+  "homepage": "https://github.com/kevnat/cc-api#readme",
+  "dependencies": {
+    "axios": "^0.18.0"
+  }
+}
