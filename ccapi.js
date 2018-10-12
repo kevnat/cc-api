@@ -18,7 +18,8 @@ const config = {
     account:"4444333322221111",
     expiry: "0822",
     amount: "100",
-    retref: "285439205004"
+    retref: "285474105992",
+    capture: "Y"
 };
 
 //test function to see validate credentials
@@ -40,11 +41,12 @@ testConnect();
 
 */
 class Auth {
-    constructor(merchid, cardnum, expiry, amount) {
+    constructor(merchid, cardnum, expiry, amount, capture) {
         this.account = cardnum;
         this.expiry = expiry;
         this.amount = amount;
         this.merchid = merchid;
+        this.capture = capture;
     };
     runAuth() {
         //TO DO: parameterize URL
@@ -52,7 +54,8 @@ class Auth {
             account: this.account,
             expiry: this.expiry,
             amount: this.amount, 
-            merchid: this.merchid
+            merchid: this.merchid,
+            capture: this.capture
         })
         .then(function(response){
             // console.log(response.data);
@@ -106,23 +109,63 @@ class Void {
         })
         .then(function(response){
             console.log(response.data);
+            // { authcode: 'REVERS',
+            // respproc: 'FNOR',
+            // amount: '0.00',
+            // resptext: 'Approval',
+            // currency: 'USD',
+            // retref: '285439205004',
+            // respstat: 'A',
+            // respcode: '00',
+            // merchid: '496160873888' }
+            
+            //find retref by id and update:  
+                // respstat to voided
+                // amount to 0.00
+
         })
         .catch(function(error){
             console.log(error);
         })
     }
 }
+
+class Refund {
+    constructor(merchid, retref) {
+        this.merchid = merchid;
+        this.retref = retref;
+        this.amount = amount; //if omitted, full amount will be voided
+    };
+    runRefund() {
+        API.put('/refund', {
+            merchid: this.merchid,
+            retref: this.retref 
+        })
+        .then(function(response){
+            console.log(response.data);
+        })
+        .catch(function(error){
+            console.log(error);
+        })
+    }
+}
+
 // destructuring properties of 'config' object into different variables
-const { merchid, account, expiry, amount, retref } = config; 
+const { merchid, account, expiry, amount, retref, capture } = config; 
 console.log("config loaded");
 
+//INSTATIATING AND CALLING RUN* FUNCTIONS
 //instatiate the auth class by passing the required parameters
+//calling the runAuth function... 
 //
-let newAuth = new Auth( merchid, account, expiry, amount);
+let newAuth = new Auth( merchid, account, expiry, amount, capture);
 newAuth.runAuth();
 
 let newVoid = new Void( merchid, retref );
 newVoid.runVoid();
+
+let newRefund = new Refund ( merchid, retref );
+newRefund.runRefund();
 
 
 // export the config and classess for refactoring later
