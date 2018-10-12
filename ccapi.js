@@ -17,7 +17,8 @@ const config = {
     merchid: "496160873888",
     account:"4444333322221111",
     expiry: "0822",
-    amount: "100"
+    amount: "100",
+    retref: "285439205004"
 };
 
 //test function to see validate credentials
@@ -93,26 +94,36 @@ class Auth {
 
 
 class Void {
-    constructor(merchid, retref, amount) {
+    constructor(merchid, retref) {
         this.merchid = merchid;
         this.retref = retref;
-        this.amount = amount; //if omitted, full amount will be voided
+        // this.amount = amount; //if omitted, full amount will be voided
     };
     runVoid() {
         API.put('/void', {
             merchid: this.merchid,
-            retref: this.retref, 
+            retref: this.retref 
+        })
+        .then(function(response){
+            console.log(response.data);
+        })
+        .catch(function(error){
+            console.log(error);
         })
     }
 }
 // destructuring properties of 'config' object into different variables
-const { merchid, account, expiry, amount } = config; 
+const { merchid, account, expiry, amount, retref } = config; 
 console.log("config loaded");
 
 //instatiate the auth class by passing the required parameters
 //
 let newAuth = new Auth( merchid, account, expiry, amount);
 newAuth.runAuth();
+
+let newVoid = new Void( merchid, retref );
+newVoid.runVoid();
+
 
 // export the config and classess for refactoring later
 // export {config, Auth, Void};
